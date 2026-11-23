@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>요청 글 작성/등록 (빌려주세요)</h2>
+
+    <form method="POST" class="box">
+        <div style="margin-bottom: 15px;">
+            <label><strong>제목</strong></label><br>
+            <input type="text" name="title" placeholder="예: 공학용 계산기 내일 하루만 빌려주세요" required style="width: 100%; padding: 8px; margin-top: 5px;">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label><strong>내용 (원하는 물품, 희망 가격, 대여일, 장소 등 제시)</strong></label><br>
+            <textarea name="content" rows="5" required style="width: 100%; padding: 8px; margin-top: 5px;"></textarea>
+        </div>
+
+        <button type="submit" style="font-weight: bold; padding: 10px 20px;">게시물 등록</button>
+        <a href="/items"><button type="button">취소</button></a>
+    </form>
+{% endblock %}

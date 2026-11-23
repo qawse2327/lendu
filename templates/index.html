@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- 1. 광고/이벤트 배너 영역 -->
+    <div class="box" style="text-align: center; height: 100px; display: flex; align-items: center; justify-content: center;">
+        <h3>[ 광고 / 이벤트 배너 영역 ]</h3>
+    </div>
+
+    <!-- 2. 추천 물품 & 카테고리 영역 -->
+    <div>
+        <h3>추천 물품</h3>
+        
+        <!-- 카테고리 버튼 -->
+        <div style="margin-bottom: 15px;">
+            <button>전체</button>
+            <button>전공서적</button>
+            <button>전자기기</button>
+            <button>생활/취미</button>
+        </div>
+
+        <!-- 추천 물품 카드 리스트 -->
+        <div class="grid">
+            {% for item in items %}
+            <div class="card">
+                <div class="img-placeholder">이미지</div>
+                <div><strong>{{ item.name }}</strong></div>
+                <div>일당 {{ item.price }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

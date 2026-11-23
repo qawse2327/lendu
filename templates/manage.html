@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>거래 관리 (채팅 및 거래 진행 현황)</h2>
+
+    <div style="display: flex; gap: 20px; align-items: flex-start;">
+        
+        <!-- 왼쪽: 1:1 채팅 영역 (발표자료 24, 30p) -->
+        <div class="box" style="width: 40%;">
+            <h3>1:1 채팅 (조건 조율)</h3>
+            <div style="border: 1px solid #ccc; height: 280px; overflow-y: auto; padding: 10px; margin-bottom: 10px; background: #fafafa;">
+                {% for chat in chats %}
+                <div style="margin-bottom: 10px; text-align: {{ 'right' if chat.sender == '나(로그인유저)' else 'left' }};">
+                    <div style="font-size: 11px; color: #666;">{{ chat.sender }}</div>
+                    <span style="display: inline-block; border: 1px solid #000; padding: 6px 10px; background: #fff;">
+                        {{ chat.text }}
+                    </span>
+                </div>
+                {% endfor %}
+            </div>
+            <form method="POST" style="display: flex; gap: 5px;">
+                <input type="text" name="message" placeholder="대여일, 가격, 장소 조건 조율..." required style="flex-grow: 1; padding: 6px;">
+                <button type="submit">전송</button>
+            </form>
+        </div>
+
+        <!-- 오른쪽: 받은 요청 및 거래 진행 상태 (발표자료 31~35p) -->
+        <div class="box" style="width: 60%;">
+            <h3>받은 요청 및 진행 중인 거래</h3>
+
+            {% if not trades %}
+                <p>현재 진행 중인 요청이나 거래가 없습니다.</p>
+            {% endif %}
+
+            {% for t in trades %}
+            <div style="border: 1px solid #000; padding: 15px; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 12px; font-weight: bold;">[{{ t.type }}]</span>
+                    <span style="border: 1px solid #000; padding: 2px 8px; font-size: 12px;">상태: <strong>{{ t.status }}</strong></span>
+                </div>
+
+                <div style="font-size: 16px; margin-bottom: 5px;"><strong>{{ t.item_name }}</strong></div>
+                <div style="font-size: 13px; color: #444; margin-bottom: 10px;">
+                    상대방: {{ t.partner }} | 기간: {{ t.days }}일 | 장소: {{ t.place }}<br>
+                    대여료: {{ "{:,}".format(t.rental_fee) }}원 + 보증금: {{ "{:,}".format(t.deposit) }}원
+                </div>
+
+                <!-- 상태별 액션 버튼 (발표자료 32, 33, 35, 36p 흐름) -->
+                <div style="display: flex; gap: 10px; border-top: 1px dashed #ccc; padding-top: 10px;">
+                    {% if t.status == "요청됨" %}
+                        <form method="POST" action="/trade/{{ t.id }}/accept" onsubmit="return confirm('이 거래 요청을 수락하시겠습니까?');">
+                            <button type="submit" style="font-weight: bold;">수락</button>
+                        </form>
+                        <form method="POST" action="/trade/{{ t.id }}/cancel" onsubmit="return confirm('거래를 거절/취소하시겠습니까?');">
+                            <button type="submit">거절</button>
+                        </form>
+
+                    {% elif t.status == "결제대기" %}
+                        <a href="/payment/{{ t.id }}"><button type="button" style="font-weight: bold;">결제하기 (대여 확정)</button></a>
+                        <form method="POST" action="/trade/{{ t.id }}/cancel" onsubmit="return confirm('거래를 취소하시겠습니까?');">
+                            <button type="submit">거래 취소</button>
+                        </form>
+
+                    {% elif t.status == "결제완료" %}
+                        <form method="POST" action="/trade/{{ t.id }}/receive" onsubmit="return confirm('물품을 직거래로 수령하셨습니까? 공급자에게 대여료가 정산됩니다.');">
+                            <button type="submit" style="font-weight: bold;">[수요자] 물품 수령 완료</button>
+                        </form>
+
+                    {% elif t.status == "대여중 (수령완료)" %}
+                        <form method="POST" action="/trade/{{ t.id }}/return" onsubmit="return confirm('물품 반납 및 상태를 확인하셨습니까? 수요자에게 보증금이 자동 환불됩니다.');">
+                            <button type="submit" style="font-weight: bold;">[공급자] 반납 확인 완료</button>
+                        </form>
+
+                    {% elif t.status == "반납완료" %}
+                        <a href="/review/{{ t.id }}"><button type="button" style="font-weight: bold;">거래 후기 남기기</button></a>
+
+                    {% elif t.status == "후기완료" %}
+                        <span style="font-size: 13px; color: #555;">정산 및 후기 작성이 모두 완료된 거래입니다.</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}

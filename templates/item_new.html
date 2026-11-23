@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>물품 등록하기</h2>
+
+    <form method="POST" class="box">
+        <div style="margin-bottom: 15px;">
+            <label><strong>제목 (물품명)</strong></label><br>
+            <input type="text" name="title" required style="width: 100%; padding: 8px; margin-top: 5px;">
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label><strong>내용 (상태, 거래 장소 등)</strong></label><br>
+            <textarea name="content" rows="4" required style="width: 100%; padding: 8px; margin-top: 5px;"></textarea>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label><strong>사진 등록</strong></label><br>
+            <div class="img-placeholder" style="width: 150px; height: 100px; margin-top: 5px;">+ 사진 첨부 영역</div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label><strong>대여일 당 가격 설정 (원)</strong></label><br>
+            <input type="number" name="price" placeholder="예: 5000" required style="padding: 8px; margin-top: 5px;">
+        </div>
+
+        <button type="submit" style="font-weight: bold; padding: 10px 20px;">게시물 등록</button>
+        <a href="/lend"><button type="button">취소</button></a>
+    </form>
+{% endblock %}

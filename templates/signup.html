@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="box" style="max-width: 500px; margin: 20px auto;">
+        <h2>회원가입</h2>
+
+        <form method="POST">
+            <!-- 1. 약관 동의 (발표자료 11p) -->
+            <div style="border-bottom: 1px solid #ccc; padding-bottom: 15px; margin-bottom: 15px;">
+                <strong>약관 동의 및 본인인증</strong><br><br>
+                <label><input type="checkbox" required> 서비스 이용약관 동의 (필수)</label><br>
+                <label><input type="checkbox" required> 개인정보 수집 및 이용 동의 (필수)</label><br>
+                <label><input type="checkbox" required> 캠퍼스 안전 거래 정책 동의 (필수)</label><br>
+                <label><input type="checkbox"> 이벤트/알림 수신 동의 (선택)</label><br><br>
+                <button type="button" onclick="alert('휴대폰 본인인증이 완료되었습니다!')">본인인증 하기</button>
+            </div>
+
+            <!-- 2. 정보 입력 (발표자료 12p) -->
+            <div style="margin-bottom: 12px;">
+                <label>아이디 입력</label><br>
+                <input type="text" name="user_id" required style="padding: 6px; width: 65%;">
+                <button type="button" onclick="alert('사용 가능한 아이디입니다!')">중복확인</button>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label>비밀번호 입력</label><br>
+                <input type="password" required style="padding: 6px; width: 95%;">
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label>비밀번호 확인</label><br>
+                <input type="password" required style="padding: 6px; width: 95%;">
+            </div>
+
+            <!-- 3. 학교 인증 연동 (발표자료 12~13p) -->
+            <div style="margin-bottom: 20px;">
+                <label>학교명</label><br>
+                <input type="text" id="mainUnivInput" name="univ_name" placeholder="예: 한국대학교" required style="padding: 6px; width: 65%;">
+                <input type="hidden" id="hiddenStudentId" name="student_id" value="20251234">
+                <button type="button" onclick="openAuthPopup()" style="font-weight: bold;">학교 인증</button>
+                <span id="authStatus" style="font-size: 12px; color: green; margin-left: 5px;"></span>
+            </div>
+
+            <button type="submit" style="width: 100%; padding: 10px; font-weight: bold;">회원가입 완료</button>
+        </form>
+    </div>
+
+    <!-- 학교 인증 팝업 페이지 (발표자료 13p 도안) -->
+    <div id="schoolAuthModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4);">
+        <div style="background: #fff; border: 2px solid #000; width: 320px; margin: 150px auto; padding: 20px;">
+            <h3 style="margin-top: 0;">학교 인증</h3>
+            <div style="margin-bottom: 10px;">
+                <label>학교명</label><br>
+                <input type="text" id="modalUniv" placeholder="학교명 입력" style="width: 95%; padding: 6px;">
+            </div>
+            <div style="margin-bottom: 15px;">
+                <label>학번</label><br>
+                <input type="text" id="modalStudentId" placeholder="예: 20251234" style="width: 95%; padding: 6px;">
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <button type="button" onclick="completeAuth()" style="font-weight: bold;">인증하기</button>
+                <button type="button" onclick="closeAuthPopup()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openAuthPopup() {
+            document.getElementById("modalUniv").value = document.getElementById("mainUnivInput").value;
+            document.getElementById("schoolAuthModal").style.display = "block";
+        }
+        function closeAuthPopup() {
+            document.getElementById("schoolAuthModal").style.display = "none";
+        }
+        function completeAuth() {
+            const univ = document.getElementById("modalUniv").value;
+            const sid = document.getElementById("modalStudentId").value;
+            if (!univ || !sid) { alert("학교명과 학번을 모두 입력해주세요."); return; }
+            document.getElementById("mainUnivInput").value = univ;
+            document.getElementById("hiddenStudentId").value = sid;
+            document.getElementById("authStatus").innerText = "✔ 인증완료";
+            closeAuthPopup();
+        }
+    </script>
+{% endblock %}

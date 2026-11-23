@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>물품 찾기 (공급 게시물 확인)</h2>
+
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <div>
+            <input type="text" placeholder="필요한 물품 검색..." style="padding: 5px; width: 250px;">
+            <button>검색</button>
+        </div>
+        <a href="/requests/new"><button style="font-weight: bold;">+ 요청 글 쓰기</button></a>
+    </div>
+
+    <div class="grid" style="flex-wrap: wrap;">
+        {% for item in items %}
+        <div class="card" style="margin-bottom: 15px;">
+            <a href="/items/{{ item.id }}" style="text-decoration: none; color: #000;">
+                <div class="img-placeholder">사진</div>
+                <div style="font-size: 12px; color: #555;">공급자: {{ item.owner }}</div>
+                <div style="margin: 5px 0;"><strong>{{ item.name }}</strong></div>
+                <div>대여일 당 {{ "{:,}".format(item.price) }}원</div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

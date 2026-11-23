@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>빌려주기 (수요자 요청 글 확인)</h2>
+
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <div>
+            <input type="text" placeholder="요청 글 검색..." style="padding: 5px; width: 250px;">
+            <button>검색</button>
+        </div>
+        <a href="/items/new"><button style="font-weight: bold;">+ 물품 등록하기</button></a>
+    </div>
+
+    <div>
+        {% for req in requests %}
+        <div class="box" style="margin-bottom: 10px; padding: 15px;">
+            <a href="/requests/{{ req.id }}" style="text-decoration: none; color: #000; display: block;">
+                <div style="font-size: 12px; color: #555;">요청자: {{ req.writer }}</div>
+                <div style="font-size: 18px; margin: 5px 0;"><strong>[빌려주세요] {{ req.title }}</strong></div>
+                <div>{{ req.content }}</div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

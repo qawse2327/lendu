@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>결제하기</h2>
+
+    <form method="POST" class="box" style="max-width: 500px; margin: 0 auto;" onsubmit="return confirm('결제를 진행하시겠습니까? 결제 완료 시 대여가 최종 확정됩니다.');">
+        <h3>결제 내역 확인</h3>
+        <div style="border-bottom: 1px solid #000; padding-bottom: 15px; margin-bottom: 15px;">
+            <p><strong>물품명:</strong> {{ trade.item_name }} ({{ trade.days }}일)</p>
+            <p><strong>거래 장소:</strong> {{ trade.place }}</p>
+            <p><strong>대여료:</strong> {{ "{:,}".format(trade.rental_fee) }}원</p>
+            <p><strong>파손/연체 보증금 (반납 후 환불):</strong> {{ "{:,}".format(trade.deposit) }}원</p>
+            <hr>
+            <div style="font-size: 18px;">
+                <strong>최종 결제 금액: {{ "{:,}".format(trade.rental_fee + trade.deposit) }}원</strong>
+            </div>
+        </div>
+
+        <h3>결제 수단 선택</h3>
+        <div style="margin-bottom: 20px;">
+            <label><input type="radio" name="pay_method" value="card" checked> 신용/체크카드</label><br><br>
+            <label><input type="radio" name="pay_method" value="pay"> 간편결제(페이)</label><br><br>
+            <label><input type="radio" name="pay_method" value="bank"> 계좌이체</label>
+        </div>
+
+        <button type="submit" style="font-weight: bold; padding: 10px 20px; width: 100%;">결제 완료하기</button>
+        <div style="margin-top: 10px; text-align: center;">
+            <a href="/manage"><button type="button">돌아가기</button></a>
+        </div>
+    </form>
+{% endblock %}

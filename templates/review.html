@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>거래 완료 후기 작성</h2>
+
+    <form method="POST" class="box" style="max-width: 550px; margin: 0 auto;" onsubmit="alert('후기가 등록되었습니다!');">
+        <p><strong>반납 및 정산/환불이 완료되었습니다!</strong><br>
+        [{{ trade.item_name }}] 거래에 대한 후기를 남겨주세요.</p>
+        <hr>
+
+        <div style="margin: 15px 0;">
+            <label><strong>매너 평점 선택:</strong></label>
+            <select name="rating" style="padding: 5px; margin-left: 10px;">
+                <option value="5">★★★★★ (5.0)</option>
+                <option value="4">★★★★☆ (4.0)</option>
+                <option value="3">★★★☆☆ (3.0)</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <strong>매너 키워드 선택 (중복 가능):</strong><br><br>
+            <label><input type="checkbox" name="tags" value="시간 약속을 잘 지켜요"> 시간 약속을 잘 지켜요</label><br>
+            <label><input type="checkbox" name="tags" value="물품 상태가 깨끗해요"> 물품 상태가 깨끗해요</label><br>
+            <label><input type="checkbox" name="tags" value="친절하고 응답이 빨라요"> 친절하고 응답이 빨라요</label><br>
+            <label><input type="checkbox" name="tags" value="설명이 자세해요"> 설명이 자세해요</label>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label><strong>한 줄 후기 입력</strong></label><br>
+            <textarea name="comment" rows="3" placeholder="상대방과의 거래 경험을 남겨주세요." required style="width: 100%; padding: 8px; margin-top: 5px;"></textarea>
+        </div>
+
+        <button type="submit" style="font-weight: bold; padding: 10px 20px;">후기 등록하기</button>
+        <a href="/manage"><button type="button">취소</button></a>
+    </form>
+{% endblock %}
